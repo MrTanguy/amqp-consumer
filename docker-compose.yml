@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  node-app:
+    image: node:20
+    working_dir: /app
+    volumes:
+      - .:/app
+    ports:
+      - "4000:4000"
+    command: sh -c "npm install && npm start"
+    environment:
+      - MYSQL_HOST=mysql-db
