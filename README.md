@@ -17,7 +17,7 @@ Utiliser la branch dev `git checkout dev`
 
 Lancer la commande `docker-compose up`
 
-Se rendre sur `http://localhost:8025/` pour découvrir les routes disponibles.
+Se rendre sur `http://localhost:8025/` pour voir les mails reçus.
 
 Il est important de réaliser le README de ce projet avant de tester celui-là : [amqp-producer](https://github.com/MrTanguy/amqp-producer/tree/dev)
 
