@@ -19,18 +19,14 @@ async function connectToRabbitMQ() {
 
     // Écouter la file d'attente
     channel.consume(queueName, async (message) => {
-
         if (message !== null) {
-
-            console.log('message catched !')
-
+            console.log('Message received from RabbitMQ:', message.content.toString());
+    
             const email = JSON.parse(message.content.toString()).message;
-
+    
             // Envoyer un e-mail via MailHog
-            await sendEmail(email);
-
-            console.log(`E-mail envoyé à ${email}`);
-
+            sendEmail(email);
+        
             // Acknowledge le message pour le supprimer de la file d'attente
             channel.ack(message);
         }
@@ -40,12 +36,11 @@ async function connectToRabbitMQ() {
 // Configuration de Nodemailer pour utiliser MailHog
 const transporter = nodemailer.createTransport({
     host: mailHogHost,
-    port: 1025, // This is the default port for MailHog SMTP server
-    ignoreTLS: true,
+    port: 1025
 });
 
 // Fonction pour envoyer un e-mail
-async function sendEmail(emailAddress) {
+function sendEmail(emailAddress) {
     const mailOptions = {
         from: 'tanguy.meignier@gmail.com',
         to: emailAddress,
@@ -53,12 +48,12 @@ async function sendEmail(emailAddress) {
         text: 'Merci pour votre connexion !',
     };
 
-    try {
-        await transporter.sendMail(mailOptions);
-        console.log('Email sent!');
-    } catch (error) {
-        console.error('Error sending email:', error);
-    }
+    transporter.sendMail(mailOptions, (err, info) => {
+        if (err) {
+            return console.error('Erreur lors de l\'envoi de l\'e-mail :', err);
+        }
+        console.log('E-mail envoyé avec succès ! ID du message :', info.messageId);
+    }) 
 }
 
 // Connecter et écouter la file d'attente RabbitMQ

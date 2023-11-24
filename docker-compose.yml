@@ -11,3 +11,11 @@ services:
     command: sh -c "npm install && npm start"
     environment:
       - MYSQL_HOST=mysql-db
+    depends_on:
+      - mailhog
+  mailhog:
+    image: "mailhog/mailhog"
+    container_name: "mailhog"
+    ports:
+      - 8025:8025
+      - 1025:1025
