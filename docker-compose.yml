@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  node-app:
+    image: node:20
+    working_dir: /app
+    volumes:
+      - .:/app
+    ports:
+      - "4000:4000"
+    command: sh -c "npm install && npm start"
+    environment:
+      - MYSQL_HOST=mysql-db
+    depends_on:
+      - mailhog
+  mailhog:
+    image: "mailhog/mailhog"
+    container_name: "mailhog"
+    ports:
+      - 8025:8025
+      - 1025:1025
